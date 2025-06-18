@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const font= Roboto({
   weight:['100','300','400','500','700','900'],
@@ -34,6 +35,7 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         {children}
+        <Toaster richColors/>
       </body>
     </html>
   );
