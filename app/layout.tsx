@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import ClientProvider from "@/HOC/ClientProvider";
 
-const font= Roboto({
-  weight:['100','300','400','500','700','900'],
-  subsets:['latin']
-})
+const font = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["latin"],
+});
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -29,13 +30,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en"  className="hydrated">
+    <html lang="en" className="hydrated">
       <body
         className={`${font.className} antialiased`}
         cz-shortcut-listen="true"
       >
-        {children}
-        <Toaster richColors/>
+        <ClientProvider>
+          {children}
+          <Toaster richColors />
+        </ClientProvider>
       </body>
     </html>
   );

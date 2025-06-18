@@ -21,6 +21,9 @@ import { BASE_API_URL } from "@/server";
 import axios, { AxiosResponse } from "axios";
 import { handleAtuhRequest } from "../utils/apiRequest";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "@/redux/features/auth/authSlice";
+import { useRouter } from "next/navigation";
 
 
 
@@ -70,7 +73,7 @@ const formSchema = z
       following: string[];
       posts: string[];
       savePosts: string[];
-      isVarified: boolean | null;
+      isVarified: boolean ;
       otp: string;
       otpExpires: string;
       resetPasswordOtp: string | null;
@@ -84,6 +87,8 @@ const formSchema = z
   
 
 const SignUp = () => {
+  const dispatch= useDispatch()
+  const router = useRouter()
   const [isLoding, setIsLoding] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -107,10 +112,15 @@ const SignUp = () => {
       };
     
       const result = await handleAtuhRequest(signupReq, setIsLoding);
-    
+      
       if (result) {
-        console.log(result.data);
+        dispatch(setAuthUser({
+          user:result.data.data,
+          token:result.data.token,
+        }))
+        console.log(result);
         toast.success(result.data.message);
+        router.push("/")
       }
     };
   
