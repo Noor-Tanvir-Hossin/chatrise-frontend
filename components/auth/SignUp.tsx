@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 
@@ -120,7 +121,7 @@ const SignUp = () => {
         }))
         console.log(result);
         toast.success(result.data.message);
-        router.push("/")
+        router.push("/auth/verify")
       }
     };
   
@@ -224,6 +225,12 @@ const SignUp = () => {
                 Sign Up
               </Button>
             </form>
+            <h1 className="mt-4 text-lg text-gray-800">
+              Already have an account? {" "}
+              <Link href='/auth/login'>
+                <span className="text-blue-800 underline cursor-pointer font-medium">Login Here</span>
+              </Link>
+            </h1>
           </Form>
         </div>
       </div>
