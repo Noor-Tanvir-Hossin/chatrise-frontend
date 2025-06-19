@@ -7,6 +7,7 @@ import { Eye, EyeOff } from 'lucide-react';
 
 
 interface Props{
+    name?:string
     label?:string;
     placeholder?:string;
     value?:string;
@@ -18,6 +19,7 @@ interface Props{
 }
 
 const PasswordInput = ({
+    name,
     label,
     placeholder= "Enter Password",
     value,

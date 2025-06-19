@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "./PasswordInput";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { BASE_API_URL } from "@/server";
 import axios, { AxiosResponse } from "axios";
 import { handleAtuhRequest } from "../utils/apiRequest";
@@ -175,7 +175,7 @@ const Login = () => {
               </div>
 
               <Button type="submit" disabled={isLoding} className="w-full ">
-                {isLoding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoding && <Loader className="mr-2 h-4 w-4 animate-spin" />}
                 Login
               </Button>
             </form>

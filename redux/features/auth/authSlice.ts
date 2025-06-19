@@ -6,7 +6,7 @@ import { initialize } from 'next/dist/server/lib/render-server'
 
 interface IAuthPayload {
     user: Iuser | null
-    token: null | string
+    token?: null | string
 }
 
 const initialState:IAuthPayload ={
