@@ -9,7 +9,7 @@ export interface Iuser {
   following?: string[];
   posts?: IPost[];
   savePosts?: string[] | IPost[];
-  isVarified: boolean;
+  isVarified: boolean|null;
 }
 
 export interface IComment {

@@ -1,8 +1,4 @@
 'use client'
-import { useCurrentUser,useCurrentToken } from '@/redux/features/auth/authSlice'
-import { RootState } from '@/redux/store'
-import React from 'react'
-import { useSelector } from 'react-redux'
 import LeftSidebar from './LeftSidebar'
 import Feed from './Feed'
 import RighSidebar from './RighSidebar'

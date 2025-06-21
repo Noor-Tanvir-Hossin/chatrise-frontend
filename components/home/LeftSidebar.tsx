@@ -64,6 +64,7 @@ const LeftSidebar = () => {
     if(label==="Home")
          {router.push("/")}
     if(label ==='Logout') handleLogout()
+    if(label === 'Profile') router.push(`/profile/${user?._id}`)
 
   }
   

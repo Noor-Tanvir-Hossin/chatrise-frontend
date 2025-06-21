@@ -92,7 +92,7 @@ const RighSidebar = () => {
       </div>
       {suggestedUser?.slice(0, 5).map((s_user) => {
         return (
-          <div key={s_user?._id} className="mt-6 cursor-pointer">
+          <div onClick={()=>router.push(`/profile/${s_user?._id}`)} key={s_user?._id} className="mt-6 cursor-pointer">
             <div className="flex items-start justify-start">
               <div className="flex items-center space-x-4 cursor-pointer">
                 <Avatar className="w-9 h-9">
