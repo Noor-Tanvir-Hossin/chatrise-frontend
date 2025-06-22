@@ -1,8 +1,8 @@
 import { RootState } from '@/redux/store'
 import { Iuser } from '@/types'
 import { createSlice,PayloadAction } from '@reduxjs/toolkit'
-// import type { PayloadAction } from '@reduxjs/toolkit'
-import { initialize } from 'next/dist/server/lib/render-server'
+
+
 
 interface IAuthPayload {
     user: Iuser | null
