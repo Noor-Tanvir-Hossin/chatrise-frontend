@@ -9,16 +9,18 @@ import {
   SquarePlus,
   LogOutIcon,
 } from "lucide-react";
-import React from "react";
+import React,{useState} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import CreatePostModal from "./CreatePostModal";
 
 const LeftSidebar = () => {
   const user = useSelector(useCurrentUser);
   const router = useRouter();
   const dispatch=useDispatch()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const SidebarLinks = [
     {
       icon: <HomeIcon />,
@@ -65,11 +67,14 @@ const LeftSidebar = () => {
          {router.push("/")}
     if(label ==='Logout') handleLogout()
     if(label === 'Profile') router.push(`/profile/${user?._id}`)
+      if(label === 'Create') setIsDialogOpen(true)
 
   }
   
   return (
-    <div className="h-full">
+    <div  className="h-full">
+      <CreatePostModal isOpen={isDialogOpen} 
+      onClose={()=> setIsDialogOpen(false)}/>
       <div className="lg:p-6 p-3 cursor-pointer">
         <div onClick={() => router.push("/")}>
           <Image

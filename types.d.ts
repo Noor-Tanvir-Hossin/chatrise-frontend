@@ -35,3 +35,10 @@ export interface Ipost {
   comments:IComment[];
   createdAt: string;
 }
+
+export interface ICreatePostResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: IPost;
+}
