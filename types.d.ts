@@ -42,3 +42,14 @@ export interface ICreatePostResponse {
   statusCode: number;
   data: IPost;
 }
+
+export interface IGetAllPostResponse{
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data:{
+    posts: Ipost[],
+    postLength: number
+  } ;
+  postLength:number
+}

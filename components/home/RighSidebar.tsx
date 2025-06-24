@@ -23,11 +23,9 @@ interface ISuggestedUserResponse {
 
 const RighSidebar = () => {
   const user = useSelector(useCurrentUser);
-  console.log(user);
   const token = useSelector(useCurrentToken);
   const router = useRouter();
   const [suggestedUser, setSuggestedUser] = useState<Iuser[]>([]);
-  console.log(suggestedUser);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
