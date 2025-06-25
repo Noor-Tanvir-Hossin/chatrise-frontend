@@ -43,6 +43,25 @@ export interface ICreatePostResponse {
   data: IPost;
 }
 
+export interface ILikeOrDislikeResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: {
+    isLiked:boolean
+  };
+}
+
+export interface ISaveOrUnsaveResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: {
+    isPostSaved:boolean
+    user:Iuser
+  };
+}
+
 export interface IGetAllPostResponse{
   success: boolean;
   message: string;

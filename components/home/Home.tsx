@@ -94,7 +94,7 @@ const Home = () => {
                 </SheetContent>
               </Sheet>
           </div>
-            <Feed/>
+            <Feed  />
         </div>
         <div className='w-[30%] pt-8 px-6 lg:block hidden'>
           <RighSidebar/>

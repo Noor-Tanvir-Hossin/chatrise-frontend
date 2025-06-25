@@ -1,8 +1,8 @@
 'use client'
-import { useCurrentToken, useCurrentUser } from '@/redux/features/auth/authSlice';
-import { setPost, useAllPosts } from '@/redux/features/post/postSlice';
+import { setAuthUser, useCurrentToken, useCurrentUser } from '@/redux/features/auth/authSlice';
+import { likeOrDislike, setPost, useAllPosts } from '@/redux/features/post/postSlice';
 import { BASE_API_URL } from '@/server';
-import { IGetAllPostResponse } from '@/types';
+import { IGetAllPostResponse, ILikeOrDislikeResponse, ISaveOrUnsaveResponse } from '@/types';
 import axios, { AxiosResponse } from 'axios';
 import React,{useState, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import Comment from '../helper/Comment';
 const Feed = () => {
   const dispatch = useDispatch();
   const token = useSelector(useCurrentToken);
+  console.log(token)
   const user = useSelector(useCurrentUser);
   const posts = useSelector(useAllPosts);
   console.log(posts)
@@ -46,10 +47,61 @@ const Feed = () => {
   },[dispatch])
 
   const handleLikeDisLike =async(id:string)=>{
-
+    const getLikeOrDislikeReq = async (): Promise<
+        AxiosResponse<ILikeOrDislikeResponse>
+      > => {
+        const response = await axios.post<ILikeOrDislikeResponse>(
+          `${BASE_API_URL}/post/like-dislike-post/${id}`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+        console.log("API SUCCESS ➔", response.data);
+        if(response?.data.success){
+          if(user?._id){
+            dispatch(likeOrDislike({
+              postId: id,
+              userId: user?._id
+            }))
+          }
+          toast.success(response?.data?.message)
+        }
+        return response
+      };
+      await getLikeOrDislikeReq()      
   }
   const handleSaveUnsave =async(id:string)=>{
-
+    const getSaveOrUnsaveReq = async (): Promise<
+    AxiosResponse<ISaveOrUnsaveResponse>
+  > => {
+    const response = await axios.post<ISaveOrUnsaveResponse>(
+      `${BASE_API_URL}/post/save-unsave/${id}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    console.log("API SUCCESS save or unsave ➔", response.data);
+    if(response?.data.success){
+      dispatch(setAuthUser(
+        {
+          user: response.data.data.user,
+          token: token,
+        }
+        
+      ))
+      toast.success(response?.data?.message)
+    }
+    return response
+  };
+  await getSaveOrUnsaveReq() 
   }
   const handleComment =async(id:string)=>{
 
@@ -102,11 +154,22 @@ const Feed = () => {
             </div>
             <div className='mt-3 flex items-center justify-between'>
               <div className='flex items-center space-x-4'>
-                <HeartIcon className='cursor-pointer'/>
+                <HeartIcon
+                onClick={()=>{
+                  handleLikeDisLike(post?._id)
+                }}
+                className={`cursor-pointer ${user?._id && post?.likes?.includes(user?._id) ? "text-red-500" : ''}`}/>
                 <MessageCircle className='cursor-pointer'/>
                 <Send className='cursor-pointer'/>
               </div>
-                <Bookmark className='cursor-pointer'/>
+                <Bookmark 
+                onClick={()=>{handleSaveUnsave(post._id)}}
+                className= {`cursor-pointer ${
+                  (
+                    user?.savePosts as string[])?.some(
+                      (savedPostId:string)=> savedPostId === post._id
+                    ) ? "text-red-500" : ''
+                }`}/>
             </div>
             <h1 className='mt-2 text-sm font-semibold'>
               {
