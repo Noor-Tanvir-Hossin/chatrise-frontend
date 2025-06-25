@@ -22,6 +22,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import Post from './Post';
 import Save from "./Save";
+import { useFollowUnfolow } from "../hooks/use.auth";
 
 interface IProps {
   id: string;
@@ -35,6 +36,7 @@ interface IUserProfileResponse {
 }
 
 const Profile = ({ id }: IProps) => {
+  const {handleFollowUnfollow} = useFollowUnfolow()
   const user = useSelector(useCurrentUser);
   const router = useRouter();
   const [postOrSave, setPostOrSave] = useState<string>("POST");
@@ -115,7 +117,9 @@ const Profile = ({ id }: IProps) => {
                   </Link>
                 )}
                 {!isOwnProfile && (
-                  <Button variant={isFollowing ? "destructive" : "secondary"}>
+                  <Button 
+                  onClick={()=>{handleFollowUnfollow(id)}}
+                  variant={isFollowing ? "destructive" : "secondary"}>
                     {isFollowing ? "Unfollow" : "Follow"}
                   </Button>
                 )}

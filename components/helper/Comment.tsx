@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Ipost, Iuser } from "@/types";
-import { useDispatch } from "react-redux";
+import { ICommentResponse, Ipost, Iuser } from "@/types";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogClose,
@@ -14,6 +14,12 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import DotButton from "./DotButton";
 import { Button } from "../ui/button";
+import axios, { AxiosResponse } from "axios";
+import { BASE_API_URL } from "@/server";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
+import { toast } from 'sonner';
+import { handleAtuhRequest } from "../utils/apiRequest";
+import { addComment } from '@/redux/features/post/postSlice';
 
 interface IProps {
   post: Ipost | null;
@@ -23,7 +29,38 @@ interface IProps {
 const Comment = ({ post, user }: IProps) => {
   const [comment, setComment] = useState("");
   const dispatch = useDispatch();
-  const handleaddComment = async (id: string) => {};
+  const token = useSelector(useCurrentToken);
+
+  const handleaddComment = async (id: string) => {
+    if(!comment) return
+    const addCommentReq = async (): Promise<
+    AxiosResponse<ICommentResponse>
+  > => {
+    const response = await axios.post<ICommentResponse>(
+      `${BASE_API_URL}/post/comment/${id}`,
+      {comment:comment},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    return response
+  };
+  const result = await handleAtuhRequest(addCommentReq);
+    console.log("API SUCCESS save or unsave ➔", result?.data);
+    if(result?.data.success){
+      dispatch(addComment({
+        postId:id,
+        comment:result?.data?.data
+      }))
+      toast.success(result?.data?.message)
+      setComment('')
+    }
+    
+  
+  };
 
   return (
     <div>
@@ -47,11 +84,11 @@ const Comment = ({ post, user }: IProps) => {
               <div className="flex items-center justify-between mt-4 p-4">
                 <div className="flex gap-3 items-center">
                   <Avatar>
-                    <AvatarImage src={user?.profilePicture} />
+                    <AvatarImage src={post?.user?.profilePicture} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-sm"> {user?.name} </p>
+                    <p className="font-semibold text-sm"> {post?.user?.name} </p>
                   </div>
                 </div>
                 <DotButton user={user} post={post} />
@@ -85,7 +122,11 @@ const Comment = ({ post, user }: IProps) => {
                     placeholder="Add a comment..."
                     className="w-full outline-none border text-sm border-e-gray-300 p-2 rounded"
                     />
-                    <Button variant={"outline"}>
+                    <Button 
+                    onClick={()=>{
+                      if(post?._id) handleaddComment(post._id)
+                    }}
+                    variant={"outline"}>
                         Send
                     </Button>
                 </div>

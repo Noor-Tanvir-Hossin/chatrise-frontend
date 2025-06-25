@@ -72,3 +72,36 @@ export interface IGetAllPostResponse{
   } ;
   postLength:number
 }
+
+export interface ICommentResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: {
+    _id: string;
+    text: string;
+    user: {
+      _id: string;
+      name: string;
+      profilePicture: string;
+      bio: string;
+    };
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+}
+
+export interface IFollowUnfollowResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: Iuser;
+}
+export interface IPostDeleteResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+  data: Iuser;
+}
+

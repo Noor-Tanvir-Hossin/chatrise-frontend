@@ -1,8 +1,8 @@
 'use client'
 import { setAuthUser, useCurrentToken, useCurrentUser } from '@/redux/features/auth/authSlice';
-import { likeOrDislike, setPost, useAllPosts } from '@/redux/features/post/postSlice';
+import { addComment, likeOrDislike, setPost, useAllPosts } from '@/redux/features/post/postSlice';
 import { BASE_API_URL } from '@/server';
-import { IGetAllPostResponse, ILikeOrDislikeResponse, ISaveOrUnsaveResponse } from '@/types';
+import { ICommentResponse, IGetAllPostResponse, ILikeOrDislikeResponse, ISaveOrUnsaveResponse } from '@/types';
 import axios, { AxiosResponse } from 'axios';
 import React,{useState, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -104,7 +104,32 @@ const Feed = () => {
   await getSaveOrUnsaveReq() 
   }
   const handleComment =async(id:string)=>{
-
+    if(!comment) return
+    const addCommentReq = async (): Promise<
+    AxiosResponse<ICommentResponse>
+  > => {
+    const response = await axios.post<ICommentResponse>(
+      `${BASE_API_URL}/post/comment/${id}`,
+      {comment:comment},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    console.log("API SUCCESS save or unsave ➔", response.data);
+    if(response?.data.success){
+      dispatch(addComment({
+        postId:id,
+        comment:response?.data?.data
+      }))
+      toast.success(response?.data?.message)
+      setComment('')
+    }
+    return response
+  };
+  await addCommentReq() 
   }
   if(isLoading){
     return(
@@ -124,7 +149,7 @@ const Feed = () => {
   
 
   return (
-    <div className='mt-20 w-[70%] mx-auto'>
+    <div className='my-20 w-[70%] mx-auto'>
       {
         posts?.map((post)=>{
           return (
@@ -189,6 +214,7 @@ const Feed = () => {
               onChange={(e)=>setComment(e.target.value)}
               />
               <p 
+              onClick={()=>{handleComment(post._id)}}
               role="button"
               className='text-sm font-semibold text-blue-700 cursor-pointer'>
                 Post
