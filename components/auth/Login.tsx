@@ -11,6 +11,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "./PasswordInput";
@@ -24,9 +25,6 @@ import { setAuthUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const passwordValidationRegex = new RegExp(
-  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{6,}$"
-);
 
 const formSchema = z.object({
   email: z.string().email({
@@ -35,15 +33,8 @@ const formSchema = z.object({
   password: z
     .string({
       required_error: "Password is required",
-    })
-    .min(6, {
-      message: "Password must be at least 6 character ",
     }),
-  // .regex(
-  //     passwordValidationRegex,{
-  //         message:"Password must be containt 6 character, 1 Uppercase, 1 Lowercase, 1 number and 1 special character."
-  //     }
-  // )
+    
 });
 
 interface ILoginResponse {
@@ -147,6 +138,7 @@ const Login = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -162,6 +154,7 @@ const Login = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

@@ -35,7 +35,8 @@ const PasswordInput = ({
   return <>
   {
     label && (
-        <Label className={`font-semibold mb-2 block ${labelClassName}`}>
+        <Label 
+        className={`font-semibold mb-2 block ${labelClassName}`}>
             {label}
 
         </Label>

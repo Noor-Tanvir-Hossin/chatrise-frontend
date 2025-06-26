@@ -44,12 +44,12 @@ const formSchema = z
       })
       .min(6, {
         message: "Password must be at least 6 character ",
-      }),
-    // .regex(
-    //     passwordValidationRegex,{
-    //         message:"Password must be containt 6 character, 1 Uppercase, 1 Lowercase, 1 number and 1 special character."
-    //     }
-    // )
+      })
+    .regex(
+        passwordValidationRegex,{
+            message:"Password must be containt 6 character, 1 Uppercase, 1 Lowercase, 1 number and 1 special character."
+        }
+    ),
     confirmPassword: z.string({
       required_error: "Confirm password is required",
     }),
@@ -103,16 +103,18 @@ const SignUp = () => {
 
   const onSubmit= async(values: z.infer<typeof formSchema>)  => {
     console.log(values);
+    const { name, email, password } = values;
     const signupReq = async (): Promise<AxiosResponse<RegisterResponse>> => {
         const response = await axios.post<RegisterResponse>(
           `${BASE_API_URL}/auth/register`,
-          values,
+          { name, email, password },
           { withCredentials: true }
         );
         return response;
       };
     
       const result = await handleAtuhRequest(signupReq, setIsLoding);
+      console.log(result)
       
       if (result) {
         dispatch(setAuthUser({
@@ -168,6 +170,7 @@ const SignUp = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -187,6 +190,7 @@ const SignUp = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -202,6 +206,7 @@ const SignUp = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -217,6 +222,7 @@ const SignUp = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
